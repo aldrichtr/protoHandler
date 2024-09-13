@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <PackageId>ProtoHandler</PackageId>
+        <OutputType>Exe</OutputType>
+        <OutputPath>../../bin</OutputPath>
+        <TargetName>protoHandler</TargetName>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="CommandLineArgumentParser" Version="1.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+        <PackageReference Include="Microsoft.PowerShell.SDK" Version="7.4.5" />
+        <PackageReference Include="System.Management.Automation" Version="7.4.5" />
+    </ItemGroup>
+</Project>
