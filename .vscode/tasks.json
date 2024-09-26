@@ -1,0 +1,121 @@
+{
+/* [markdown]
+ * ## The task's properties have the following semantic:
+
+ * - **label:** The task's label used in the user interface.
+ * - **type:** The task's type. For a custom task, this can either be shell or
+ *             process. If shell is specified, the command is interpreted as a shell command
+ *             (for example: bash, cmd, or PowerShell). If process is specified, the command
+ *             is interpreted as a process to execute.
+ * - **command:** The actual command to execute.
+ * - **windows:** Any Windows specific properties. Will be used instead of the default
+ *                properties when the command is executed on the Windows operating
+ *                system.
+ * - **group:** Defines to which group the task belongs. In the example, it belongs to the
+ *              test group. Tasks that belong to the test group can be executed by running
+ *              Run Test Task from the Command Palette.
+ * - **presentation:** Defines how the task output is handled in the user interface. In this
+ *                     example, the Integrated Terminal showing the output is always revealed
+ *                     and a new terminal is created on every task run.
+ * - **options:** Override the defaults for cwd (current working directory), env (environment
+ *                variables), or shell (default shell). Options can be set per task but also
+ *                globally or per platform. Environment variables configured here can only be
+ *                referenced from within your task script or process and will not be resolved
+ *                if they are part of your args, command, or other task attributes.
+ * - **runOptions:** Defines when and how a task is run.
+*/
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "rust: cargo build",
+            "type": "cargo",
+            "command": "build",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "label": "rust: cargo clippy",
+            "type": "cargo",
+            "command": "clippy",
+            "problemMatcher": {
+                "owner": "rust",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": [
+                    {
+                        "regexp": "^(warning|warn|error): (.*)$",
+                        "severity": 0,
+                        "message": 1
+                    },
+                    {
+                        "regexp": "^\\s+--> (.*):(\\d+):(\\d+)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3
+                    },
+                    {
+                        "regexp": "^\\s+\\|$"
+                    },
+                    {
+                        "regexp": "^\\s*(\\d+)\\s*\\|\\s+(.*)",
+                        "line": 0,
+                        "code": 1
+                    },
+                    {
+                        "regexp": "^\\s+\\|\\s+(.*)$",
+                        "message": 1
+                    },
+                    {
+                        "regexp": "^\\s+\\|$"
+                    },
+                    {
+                        "regexp": "^\\s+\\|\\s+(.*)$",
+                        "message": 1
+                    }
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "focus": false,
+                "panel": "dedicated",
+                "showReuseMessage": true,
+                "clear": true,
+                "group": "build"
+            }
+        },
+        {
+            "label": "rust: cargo nextest",
+            "type": "cargo",
+            "command": "nextest",
+            "args": [ "run" ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "rust: cargo clean",
+            "type": "cargo",
+            "command": "clean",
+        }
+    ]
+}

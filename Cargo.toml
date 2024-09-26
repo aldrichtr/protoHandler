@@ -1,0 +1,30 @@
+[package]
+name = "protohandlers"
+description = "Launch scripts and programs based on Protocol Handler URIs"
+version = "0.1.0"
+edition = "2021"
+# --
+build = "build/main.rs"
+# --
+authors = ["Timothy Aldrich <mailto:timothy.r.aldrich@gmail.com>"]
+homepage = "https://github.com/aldrichtr/protohandlers"
+repository = "https://github.com/aldrichtr/protohandlers"
+keywords = ["protocol-handler", "launcher", "capture"]
+categories = ["command-line-utilities"]
+license-file = "LICENSE.md"
+
+
+[dependencies]
+clap = { version = "4.5.17", features = ["derive"] }
+etcetera = "0.8.0"
+log = "0.4.22"
+regex = "1.10.6"
+resolve-path = "0.1.0"
+serde = { version = "1.0.210", features = ["derive"] }
+serde_yml = "0.0.12"
+simplelog = { version = "0.12.2", features = ["paris"] }
+thiserror = "1.0.63"
+
+[dev-dependencies]
+tempfile = "3.12.0"
+test_suite_rs = "0.1.4"
