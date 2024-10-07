@@ -72,7 +72,7 @@ pub fn build_command(uri : String, config : Config) -> Result<Command, ProtoHand
             commandline.extend(script_args);
         }
         let mut command = Command::new(program);
-        let quoted_uri = format!("\"{0}\"", uri);
+        let quoted_uri = format!("\"{uri}\"");
         command.args(commandline).arg(quoted_uri);
         Ok(command)
     } else {
@@ -102,7 +102,7 @@ pub fn build_command(uri : String, config : Config) -> Result<Command, ProtoHand
 /// assert_eq!(protocol, Some("http".to_string()));
 /// ```
 
-pub fn get_protocol(uri : &String) -> Option<String> {
+#[must_use] pub fn get_protocol(uri : &String) -> Option<String> {
     // attempt to find the protocol string at the begining of the uri
     let re = Regex::new(r"^(?<proto>[a-z][a-zA-Z0-9-_]+):\/\/").unwrap();
     if let Some(p) = re.captures(uri) {
@@ -137,7 +137,7 @@ pub fn get_protocol(uri : &String) -> Option<String> {
 /// assert!(protocol_config.is_some());
 /// ```
 
-pub fn lookup_protocol(proto : &String, config : &Config) -> Option<ProtocolConfig> {
+#[must_use] pub fn lookup_protocol(proto : &String, config : &Config) -> Option<ProtocolConfig> {
     config
         .protocols
         .clone()
@@ -168,7 +168,7 @@ pub fn lookup_protocol(proto : &String, config : &Config) -> Option<ProtocolConf
 /// assert!(shell_config.is_some());
 /// ```
 
-pub fn lookup_shell(name : &String, config : &Config) -> Option<ShellConfig> {
+#[must_use] pub fn lookup_shell(name : &String, config : &Config) -> Option<ShellConfig> {
     debug!("Looking up configuration for shell '{name}'");
     config.shells.clone().into_iter().find(|s| s.name == *name)
 }

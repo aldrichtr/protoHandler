@@ -59,19 +59,19 @@ impl Default for Config {
 }
 
 impl Config {
-    pub fn new() -> Self {
+    #[must_use] pub fn new() -> Self {
         Config::default()
     }
 
     /// Returns the directory where the `protohandler` configuration is stored.
-    pub fn get_directory(&self) -> PathBuf {
+    #[must_use] pub fn get_directory(&self) -> PathBuf {
         let strategy = etcetera::choose_base_strategy().expect("Unable to find config directory");
 
         strategy.config_dir().join(APP_NAME)
     }
 
     /// Returns the file path of the `protohandler` configuration file.
-    pub fn get_file(&self) -> PathBuf {
+    #[must_use] pub fn get_file(&self) -> PathBuf {
         let dir = self.get_directory();
         let file = APP_NAME.to_string() + CONFIG_EXT;
 
@@ -149,7 +149,7 @@ impl LoggingConfig {
     /// # Returns
     ///
     /// * `LevelFilter` - The corresponding `simplelog` logging level.
-    pub fn convert_level(&self) -> LevelFilter {
+    #[must_use] pub fn convert_level(&self) -> LevelFilter {
         match self.level {
             LoggingLevel::Debug => LevelFilter::Debug,
             LoggingLevel::Info => LevelFilter::Info,
