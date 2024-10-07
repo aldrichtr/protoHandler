@@ -1,7 +1,19 @@
+//! A tool to trigger a script based on the protocol and URI sent to the program
+//!
+//! Protocol handlers are a function found in linux, MacOS and Windows that
+//! allows the OS to associate a URI with a given program.  protoHandler.rs can
+//! be configured to receive the URI and pass them on to other programs or
+//! scripts based on the protocol.
+
+#![warn(clippy::pedantic)]
+
 pub mod cli;
 pub mod command;
 pub mod config;
 pub mod error;
+
+#[cfg(test)]
+mod tests;
 
 use std::borrow::Cow;
 use std::path::Path;
@@ -54,7 +66,17 @@ fn main() {
                 println!("{:?} given as config file but does not exist", config_file);
             },
         }
-    };
+    } else {
+        let default_config = config.get_file();
+        if default_config.exists() {
+            match config.load(default_config.into_os_string().into_string().unwrap()) {
+                Ok(_) => {},
+                Err(e) => {
+                    panic!("Error loading config {e}");
+                }
+            }
+        }
+    }
 
     if let Some(log_file) = args.log_file {
         match Path::new(&log_file).exists() {
