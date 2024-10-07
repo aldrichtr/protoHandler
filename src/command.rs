@@ -56,28 +56,28 @@ pub fn build_command(uri : String, config : Config) -> Result<Command, ProtoHand
 
         if let Some(shell_config) = lookup_shell(&shell_name, &config) {
             program = shell_config.cmd;
-            commandline.extend(shell_config.args.into_iter());
+            commandline.extend(shell_config.args);
         } else {
             return Err(ProtoHandlerError::ShellNotConfigured { sh : shell_name });
         }
 
         let extra_args = protocol_config.shell.args;
-        if extra_args.len() > 0 {
-            commandline.extend(extra_args.into_iter());
+        if !extra_args.is_empty() {
+            commandline.extend(extra_args);
         }
 
         commandline.push(protocol_config.script.name);
         let script_args = protocol_config.script.args;
-        if script_args.len() > 0 {
-            commandline.extend(script_args.into_iter());
+        if !script_args.is_empty() {
+            commandline.extend(script_args);
         }
         let mut command = Command::new(program);
         let quoted_uri = format!("\"{0}\"", uri);
         command.args(commandline).arg(quoted_uri);
-        return Ok(command);
+        Ok(command)
     } else {
         info!("protocol '{proto}' not configured");
-        return Err(ProtoHandlerError::ProtocolNotConfigured { proto : (proto) });
+        Err(ProtoHandlerError::ProtocolNotConfigured { proto : (proto) })
     }
 }
 
@@ -105,13 +105,13 @@ pub fn build_command(uri : String, config : Config) -> Result<Command, ProtoHand
 pub fn get_protocol(uri : &String) -> Option<String> {
     // attempt to find the protocol string at the begining of the uri
     let re = Regex::new(r"^(?<proto>[a-z][a-zA-Z0-9-_]+):\/\/").unwrap();
-    if let Some(p) = re.captures(&uri) {
+    if let Some(p) = re.captures(uri) {
         let proto = p["proto"].to_string();
-        return Some(proto);
+        Some(proto)
     } else {
         info!("protocol not recognized {uri}");
-        return None;
-    };
+        None
+    }
 }
 
 /// Looks up the protocol configuration in the given configuration object.
