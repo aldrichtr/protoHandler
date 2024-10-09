@@ -36,6 +36,7 @@ shells:
       - "-File"
   - name: python
     cmd: python
+    args: []
 protocols:
   - name: "snip-proto"
     desc: "A web snipping protocol"
