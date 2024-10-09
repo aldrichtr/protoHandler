@@ -1,6 +1,6 @@
 //! A tool to trigger a script based on the protocol and URI sent to the program
 //!
-//! Protocol handlers are a function found in linux, MacOS and Windows that
+//! Protocol handlers are a function found in linux, `MacOS` and Windows that
 //! allows the OS to associate a URI with a given program.  protoHandler.rs can
 //! be configured to receive the URI and pass them on to other programs or
 //! scripts based on the protocol.
@@ -8,7 +8,7 @@
 #![warn(clippy::pedantic)]
 
 pub mod cli;
-pub mod command;
+pub mod runner;
 pub mod config;
 pub mod error;
 
@@ -27,10 +27,10 @@ use std::process::Stdio;
 use std::vec;
 
 use clap::Parser;
-use command::build_command;
+use runner::build_command;
 use resolve_path::PathResolveExt;
 use simplelog::CombinedLogger;
-use simplelog::*;
+use simplelog::{ColorChoice, TermLogger, TerminalMode, WriteLogger, error, info, warn};
 
 use crate::cli::Cli;
 use crate::config::Config;
@@ -50,27 +50,24 @@ fn main() {
     };
 
     if let Some(config_file) = args.config_file {
-        match Path::new(&config_file).resolve().exists() {
-            true => {
-                println!("Using {:?} as config file", config_file);
+        if Path::new(&config_file).resolve().exists() {
+                println!("Using {config_file:?} as config file");
                 match config.load(config_file) {
-                    Ok(_) => {
+                    Ok(()) => {
                         println!("Successfully loaded config");
                     },
                     Err(e) => {
-                        panic!("Error loading config {}", e);
+                        panic!("Error loading config {e}");
                     },
                 }
-            },
-            false => {
-                println!("{:?} given as config file but does not exist", config_file);
-            },
+        } else {
+            println!("{config_file:?} given as config file but does not exist");
         }
     } else {
         let default_config = config.get_file();
         if default_config.exists() {
             match config.load(default_config.into_os_string().into_string().unwrap()) {
-                Ok(_) => {},
+                Ok(()) => {},
                 Err(e) => {
                     panic!("Error loading config {e}");
                 }
@@ -79,24 +76,22 @@ fn main() {
     }
 
     if let Some(log_file) = args.log_file {
-        match Path::new(&log_file).exists() {
-            true => {
-                println!("Using {:?} as log file", log_file);
+        if Path::new(&log_file).exists() {
+                println!("Using {log_file:?} as log file");
                 config.logging.path = log_file;
-            },
-            false => {
-                println!("{:?} given as log file but does not exist yet", log_file);
-            },
-        }
+            } else {
+                println!("{log_file:?} given as log file but does not exist yet");
+            }
     }
+
     init_log(&config);
+
     match args.uri {
         None => (),
         Some(uri) => {
             info!("Got uri, building command");
 
-            let child = build_command(uri, config);
-            match child {
+            match build_command(uri, config) {
                 Ok(mut child) => {
                     let a : Vec<&OsStr> = child.get_args().collect();
                     let a = a
@@ -131,7 +126,7 @@ fn main() {
                     }
                 },
                 Err(e) => {
-                    panic!("Error spawning process {}", e)
+                    panic!("Error spawning process {e}")
                 },
             }
         },
