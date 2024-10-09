@@ -1,0 +1,48 @@
+# ##############################################################################
+# #region Header
+# Default configuration file for protoHandler
+# #endregion Header
+# ##############################################################################
+
+# --------------------------------------------------------------------------------
+# #region Globals
+
+logging:
+  # The logging level.  Options are 'debug', 'info', 'warn', 'error', 'none'
+  # default: info
+  level: debug
+  # Path to the log file. Can be either a path relative to the directory the
+  # program is started from, or a fully-qualified path
+
+  # default: log/protohandlers.log
+  path: log/protohandlers.log
+
+
+# #endregion Globals
+# --------------------------------------------------------------------------------
+
+## Commandline building
+#
+# <shell.cmd> [shell.args] [protocol.shell.args] <protocol.script.name> [protocol.script.args]
+
+
+shells:
+  - name: pwsh
+    cmd: "pwsh"
+    # Default args passed to the shell, in addition to the URI
+    args:
+      - "-noProfile"
+      - "-noLogo"
+      - "-File"
+  - name: python
+    cmd: python
+    args: []
+protocols:
+  - name: "snip-proto"
+    desc: "A web snipping protocol"
+    script:
+      name: c:/Users/aldrichtr/.pwsh/scripts/capture.ps1
+      args: ["-Uri"] # These args will be placed after the script
+    shell:
+      name : pwsh
+      args: [] # Additional arguments to the shell for this script

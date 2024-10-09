@@ -1,25 +1,19 @@
 ---
-title: Protocol Handler for Windows
+title: "protoHandle.rs : A tool to run scripts and programs based on URI"
 ---
 
-This project is a custom Protocol Handler for Windows that invokes a PowerShell
-script with the URI sent by the browser. This allows for seamless integration
-and automation of tasks based on specific URI schemes.
+***This package is currently in the development stage.  Expect changes***
+
+This project is a custom Protocol Handler that invokes a script with the URI
+sent by the browser. This allows for seamless integration and automation of
+tasks based on specific URI schemes.
 
 ## Features
 
-- **Custom Protocol Handling**: Registers a custom protocol handler on Windows.
-- **PowerShell Integration**: Calls a specified PowerShell script with the URI
+- **Custom Protocol Handling**: Registers a custom protocol handler
+- **Script interpreter Integration**: Calls a specified script with the URI
   as a parameter.
 - **Automation**: Enables automation of tasks based on custom URI schemes.
-
-## Installation
-
-1. **Download the Installer**: Download the installer from the releases page.
-2. **Run the Installer**: Execute the installer and follow the on-screen
-   instructions.
-3. **Register the Protocol Handler**: The installer will automatically register
-   the custom protocol handler in the Windows registry.
 
 ## Usage
 
